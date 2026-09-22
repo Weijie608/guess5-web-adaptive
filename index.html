@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#18241f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Guess Five">
+    <meta name="description" content="A five-digit code game with six adaptive difficulty levels. No repeated digits.">
+    <meta property="og:title" content="Guess Five Adaptive — Choose your challenge">
+    <meta property="og:description" content="Six difficulty levels. Every reply stays consistent with every previous clue.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Guess Five Adaptive — Choose your challenge">
+    <meta name="twitter:description" content="Six difficulty levels. Every reply stays consistent with every previous clue.">
+    <title>Guess Five Adaptive — Choose your challenge</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="adaptive.css">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="masthead" aria-labelledby="game-title">
+        <div class="brand-mark" aria-hidden="true">
+          <span>5</span>
+          <i></i>
+        </div>
+        <div class="masthead-copy">
+          <p class="eyebrow">Five digits · adaptive difficulty</p>
+          <h1 id="game-title">Crack the code.</h1>
+        </div>
+        <div class="attempt-card" aria-label="Attempt count">
+          <span id="attempt-count">0</span>
+          <small>tries</small>
+        </div>
+      </header>
+
+      <section class="game-card" aria-label="Guessing game">
+        <div class="rule-strip">
+          <div>
+            <span class="rule-token rule-r">r</span>
+            <p><strong>right place</strong><br>and right digit</p>
+          </div>
+          <div>
+            <span class="rule-token rule-s">s</span>
+            <p><strong>shared digits</strong><br>including every r</p>
+          </div>
+        </div>
+
+        <div class="difficulty-panel">
+          <div class="difficulty-heading"><h2>Choose your challenge.</h2><span>Six levels</span></div>
+          <div id="difficulty-options" class="difficulty-options" role="group" aria-label="Difficulty, locked after the first valid guess">
+            <button class="difficulty-choice" data-lambda="-2" data-label="Relaxed" aria-pressed="false" type="button">Relaxed<strong>−2</strong></button>
+            <button class="difficulty-choice" data-lambda="-1" data-label="Easy" aria-pressed="false" type="button">Easy<strong>−1</strong></button>
+            <button class="difficulty-choice" data-lambda="0" data-label="Classic" aria-pressed="true" type="button">Classic<strong>0</strong></button>
+            <button class="difficulty-choice" data-lambda="1" data-label="Hard" aria-pressed="false" type="button">Hard<strong>1</strong></button>
+            <button class="difficulty-choice" data-lambda="2" data-label="Expert" aria-pressed="false" type="button">Expert<strong>2</strong></button>
+            <button class="difficulty-choice" data-lambda="4" data-label="Challenge" aria-pressed="false" type="button">Challenge<strong>4</strong></button>
+          </div><p id="level-note">Loading the game…</p>
+        </div>
+        <div class="play-area">
+          <p class="adaptive-intro">The answer can adapt. Every reply still fits all previous clues.</p>
+          <p id="status" class="status" role="status" aria-live="polite">
+            Loading the game…
+          </p>
+
+          <button id="retry-load" class="text-button" type="button" hidden>Reload game</button>
+          <form id="guess-form" novalidate>
+            <label for="guess-input">Your five-digit guess</label>
+            <div class="guess-row">
+              <input
+                id="guess-input"
+                disabled
+                name="guess"
+                type="text"
+                inputmode="numeric"
+                enterkeyhint="go"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                maxlength="5"
+                placeholder="01234"
+                aria-describedby="input-help input-error"
+              >
+              <button id="guess-button" disabled class="primary-button" type="submit">Guess</button>
+            </div>
+            <p id="input-help" class="input-help">ASCII digits 0–9 only. A leading zero is allowed.</p>
+            <p id="input-error" class="input-error" aria-live="assertive"></p>
+          </form>
+
+          <div id="result-panel" class="result-panel" hidden>
+            <p id="result-kicker" class="result-kicker">Code revealed</p>
+            <p id="revealed-secret" class="revealed-secret"></p>
+            <p id="result-copy" class="result-copy"></p>
+          </div>
+
+          <div class="secondary-actions">
+            <button id="new-game" disabled class="text-button" type="button">New game</button>
+            <button id="give-up" disabled class="text-button text-button-muted" type="button">Reveal an answer</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="history-section" aria-labelledby="history-title">
+        <div class="section-heading">
+          <h2 id="history-title">Guess history</h2>
+          <span id="history-caption">No guesses yet</span>
+        </div>
+        <ol id="history-list" class="history-list"></ol>
+      </section>
+
+      <details class="adaptive-rules">
+        <summary>How this version works</summary>
+        <p>Guess five different digits, including a possible leading zero. You may enter any valid five-digit code. The r count means the correct digit in the correct position. The s count means shared digits, including every r.</p>
+        <p>The answer is selected dynamically from codes consistent with all earlier replies. Higher levels favor replies estimated to be harder; lower levels favor easier replies. Classic (0) has the same reply probabilities as a uniformly random fixed secret.</p>
+        <p>The number on each level is its difficulty coefficient (λ). Choose it before your first valid guess; it stays locked for the round. Only 5r5s wins, even if earlier clues already identify one possible answer.</p>
+        <p>“Reveal an answer” ends the round and shows one code that fits the full history. New game or refresh clears the current guesses. No statistics, saved games, accounts or tracking.</p>
+      </details>
+      <noscript><p>This game needs JavaScript enabled.</p></noscript>
+      <footer>
+        <p>Runs on your device. No game history is saved. Refresh to start fresh.</p>
+      </footer>
+    </main>
+
+    <script>if(location.protocol === "file:"){document.querySelector("#status").textContent = "Open Start preview.cmd to play locally, or use the published website.";}</script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
