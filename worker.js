@@ -12,7 +12,7 @@ self.onmessage=event=>{
       const predictor=await ready;
       let result;
       if(message.type==='prepare') {
-        result={};
+        result={modelVersion:predictor.model.format,features:192,proofRules:true};
       } else if(message.type==='start') {
         game=new AdaptiveGame(predictor,message.lambda);session=message.session;result={};
       } else {

@@ -66,7 +66,7 @@ export class PCG64 {
     return Math.floor(m / 4294967296);
   }
   choice(population, size) {
-    if (size < 0 || size > population || size > 64) throw new Error('Unsupported probe sample');
+    if (size < 0 || size > population || size > 256) throw new Error('Unsupported probe sample');
     const seen = new Set(), out = [];
     for (let j = population-size; j < population; j++) {
       const value = this.bounded(j);
